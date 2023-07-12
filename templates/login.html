@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/styles/login.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>LOGIN/SIGNUP</title>
+</head>
+<script>
+    $(document).ready(function() {
+       
+        $('#registerr').click(function() {
+            var email = $('#email').val();
+            var first_name = $('#first_name').val();
+            var last_name = $('#last_name').val();
+            var contact = $('#contact').val();
+            var username = $('#username').val();
+            var password = $('#password').val();
+            var birthdate = $('#birthdate').val();
+                $.ajax({
+                url: '/register',
+                type: 'POST',
+                data:{email:email,first_name:first_name,last_name:last_name,contact:contact,username:username,password:password,birthdate:birthdate},
+                success: function(response) {
+                    $('#registerresponce').html(response.respo);
+                }
+            });
+        });
+    });
+
+
+</script>
+
+<body>
+    <nav>
+        <div class="navcontainer">
+        <img src="../static/img/SENTIENT.png" class="logoimg">
+        <a href="gotoindex">✖</a>
+        </div>
+    </nav>
+
+    <section>
+        <div class="logincontainer">
+        
+            <form action="loginaccount" method="post"class="flexlogin" id="login" enctype="multipart/form-data">
+                <h3>Login to Sentient</h3>
+                <input type="text" placeholder="Email Address" name="username">
+                <input type="password" placeholder="Password" name="password">
+                <button type="submit" class="loginbtn">Log In</button>
+                <p class="loginerror">{{ msg }}</p>
+            </form>
+     
+       
+            <div class="flexlogin" id="register">
+                <h3>Register into Sentient</h3>
+                <input type="text" placeholder="Username" id="username" >
+                <input type="password" placeholder="Password" id="password" >
+                <input type="text" placeholder="Email Address" id="email" >
+                <input type="text" placeholder="First Name" id="first_name" >
+                <input type="text" placeholder="Last Name" id="last_name" >
+                <input type="text" placeholder="Contact Number" id="contact" >
+                <input type="date" placeholder="birthdate" id="birthdate" >
+                <button  id="registerr" class="loginbtn">REGISTER</button>
+                <p id="registerresponce"></p>
+
+            </div>
+           
+    <script type="text/javascript" src="../static/register.js"></script>
+    
+             <div class="footflex">
+                        <a href="#"onclick="changeRegisters();return false;" id="change">Create an Account</a>
+                        <a href="#"> Recover Account</a>
+                        <a href="#"> Log in with Google</a>
+             </div>
+
+            </div>
+
+    </section>
+    
+</body>
+</html>

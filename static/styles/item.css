@@ -1,0 +1,43 @@
+.headeritem{
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    height: 2vw;
+}
+.headeritem h1{
+   width: 20%;
+   margin-bottom: 0;
+   text-align: center;
+}
+.headeritem select{
+    width: 15%;
+    text-align: center;
+    border-radius: 10px;
+    height: 100%;
+
+}
+
+
+.sdashboard a {
+    width: 70%;
+}
+.sdashboard i{
+    width: 30%;
+    display: flex;
+    font-size: 1.1vw;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.msfeedback{
+    font-family: inherit;
+    font-size: 1vw;
+    margin-left: 300px;
+}
+
+.chartbar canvas{
+    width: 100%;
+    position: relative;
+    height: auto;
+}

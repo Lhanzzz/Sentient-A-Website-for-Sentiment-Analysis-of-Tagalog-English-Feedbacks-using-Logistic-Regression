@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <script src="https://kit.fontawesome.com/904a5ca53d.js" crossorigin="anonymous"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="../static/styles/db.css">
+    <link rel="stylesheet" href="../static/styles/item.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+          
+
+      $(document).ajaxStart(function(){
+      
+      $('#loading-spinner').show();
+      
+
+      
+      });
+      $(document).ajaxStop(function(){
+      
+      $('#loading-spinner').hide();
+      
+
+      
+      });
+    
+
+
+
+
+
+        $(document).ready(function() {
+            $('#selector1, #selector,#selectoritem').on('change', function() {
+            var company = $('#selector').val();
+            var item = $('#selectoritem').val();
+            var feedbackType = $('#selector1').val();
+            $.ajax({
+              url: '/tablenegative',
+              type: 'POST',
+              data: { type: feedbackType,company : company, item : item},
+              success: function(response) {
+                $('#tableesett').html(response);
+                
+              },
+              error: function(error) {
+                console.log(error);
+              }
+            });
+          });
+        });
+
+
+        // CHANGE THE VALUE OF SELECTION DEPENDS ON THE COMPANY 
+        $(document).ready(function() {
+                  $('#selector').change(function() {
+                    var feedbackType = $(this).val();
+                    $.ajax({
+                      url: '/changeitemlist',
+                      type: 'POST',
+                      data: { feedbackType: feedbackType },
+                      success: function(response) {
+                        var options = '';
+                        options+= '<option value="all">All</option>';
+                        $.each(response, function(index, value) {
+                            options += '<option value="' + value[1] + '">' + value[1] + '</option>';
+                        });
+                        $('#selectoritem').html(options);
+                        
+                      },
+                      error: function(error) {
+                        console.log(error);
+                      }
+                    });
+                  });
+                });
+        // END
+        // CHANGE THE VALUE OF SELECTION DEPENDS ON THE COMPANY  ON LOAD
+        $(document).ready(function() {
+                    var feedbackType = $('#selector').val();
+                    $.ajax({
+                      url: '/changeitemlist',
+                      type: 'POST',
+                      data: { feedbackType: feedbackType },
+                      success: function(response) {
+                        var options = '';
+                        options+= '<option value="all">All</option>';
+                        $.each(response, function(index, value) {
+                            options += '<option value="' + value[1] + '">' + value[1] + '</option>';
+                        });
+                        $('#selectoritem').html(options);
+                        
+                      },
+                      error: function(error) {
+                        console.log(error);
+                      }
+                    });
+                  });
+
+
+    
+
+      </script>
+    
+    <title>Dashboard</title>
+</head>
+<body>
+    <div class="maincontainer" id="mani">
+        <div class="side-nav">
+            <div class="flex-sidenav">
+                <div class="sdashboard1">
+                    <img src="../static/img/dbn.png">
+                    <a href="/dashboard">Dashboard</a>
+                </div>
+                <div class="sdashboard1">
+                    <i class="fa-sharp fa-solid fa-chart-simple"></i>
+                    <a href="item">Analytics</a>
+                </div>
+                <div class="sdashboard1">
+                    <i class="fa-solid fa-user"></i>
+                    <a href="/profile">User Profile</a>
+                </div>
+                <div class="sdashboard">
+                    <i class="fa-solid fa-database" style="color: #ffffff;"></i>
+                    <a href="#">Table</a>
+                </div>
+                <div class="sdashboard1">
+                    <i class="fa-solid fa-gear"></i>
+                    <a href="/management">Database</a>
+                </div>
+            </div>
+            <div class="logoutcontainer">
+              {% if usertype == 'Premium' %}
+                    <p class="usergold">{{usertype}}</p>
+              {% else %}
+                    <p class="userstandard">{{usertype}}</p>
+              {% endif %}
+              <a href="logout"><i class="fa fa-sign-out" aria-hidden="true"></i>LOG OUT</a></div>
+        </div>
+
+        <div class="containerholder">
+       
+            <div class="navbarholder">
+                <div class="flex-nav1">
+                    <input type="text" placeholder="Search for Query">
+                </div>
+                <div class="flex-nav2">
+                    <div class="message">
+                        <img src="../static/img/message.png" alt="Message">
+                    </div>
+                    <div class="notification">
+                        <img src="../static/img/notification.png" alt="Message">
+                    </div>
+                    <div class="profile">
+                    <div class="name">
+                        <p>{{name}}</p>
+                    </div>
+                    <div class="imgprofile">
+                        <img src="../static/img/profile.jpg" alt="">
+                        <i class="fa-sharp fa-solid fa-caret-down"></i>
+                    </div>
+                    
+                </div>
+    
+            </div>
+
+
+
+
+        </div>
+        {% block content %}
+        <div class="flaskmessage">
+            {% for message in get_flashed_messages() %}
+            <div class="alert alert-warning alert-dismissible fade show" id="alert"role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" onclick="$().alert('close')"aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+            {% endfor %}
+
+            {% block page_content %}{% endblock %}
+        </div>
+        {% endblock %}
+
+
+      <!-- <form  class=filterflex action="tablenegative" method="post"> -->
+        <div class="filterflex">
+        <select id="selector" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+            {% for row in company %}  
+            <option value= "{{row[1]}}" >{{row[1]}}</option>
+            {% endfor %} 
+        </select>
+        <select id="selectoritem" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+            
+        </select>
+        <select name = "sentiment" id="selector1" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+            <option value="all" >All</option>
+            <option value="Positive">Positive</option>  
+            <option value ="Negative">Negative</option>
+        </select>
+
+        </div>
+        <div class="tablecollector" id="tablecollector">
+        
+          <table class="table" id="tableesett">
+            <div id="loading-spinner" style="display:none;">
+              <i class="fa fa-spinner fa-spin"></i> Loading...
+            </div>
+            
+        
+        </table>
+         </div>
+
+   
+         <script>
+             $(document).ready(function() {
+           
+           var company = $('#selector').val();
+           var item = "all";
+           var feedbackType = "all";
+           
+           $.ajax({
+             url: '/tablenegative',
+             type: 'POST',
+             data: { type: feedbackType,company : company, item : item},
+             success: function(response) {
+               $('#tableesett').html(response);
+             },
+             error: function(error) {
+               console.log(error);
+             }
+           });
+         });
+                
+          </script>
+
+
+
+</body>
+</html>

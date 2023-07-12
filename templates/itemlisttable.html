@@ -1,0 +1,152 @@
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script><!-- 
+<script>
+$(document).ready(function(){
+            $('button#clickkk').click(function(){
+               company = $('#item').val();
+               alert(company);
+               
+            });
+        });
+</script>
+
+
+
+<table class="table">
+    <thead class="grey">
+        <tr>
+            <th>Item</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for index, row in enumerate(itemlist) %}
+        <form action="/edititem" method="post">
+            <tr>
+                <td>
+                    <input type="hidden" value="{{company}}" name="getcompany">
+                    <input type="text" value="{{row}}" name="item" id="item{{index}}">
+                </td>
+                <td>
+                    <button id="clickkk" type="submit">UPDATE</button>
+                    <button>DELETE</button>
+                    <button>EDIT</button>
+                </td>
+            </tr>
+        </form>
+        {% endfor %}
+    </tbody>
+</table> -->
+<script>
+$(document).ready(function() {
+    $('button.update-btn').click(function(event) {
+      var index = $(event.target).data('index');
+      var item = $('#item' + index).val();
+      var newvalue = $('#new' + index).val();
+      var company = $('#company').val();
+      $.ajax({
+        url:'/edititem',
+        type:'POST',
+        data:{item:item,company:company,newvalue:newvalue},
+        success: function(data){
+          location.reload();
+        }
+      });
+  
+    });
+  });
+//  START DROP
+$(document).ready(function() {
+    $('button.delete-btn').click(function(event) {
+      var index = $(event.target).data('index');
+      var item = $('#item' + index).val();
+      var newvalue = $('#new' + index).val();
+      var company = $('#company').val();
+      $.ajax({
+        url:'/deleteitem',
+        type:'POST',
+        data:{item:item,company:company,newvalue:newvalue},
+        success: function(data){
+          location.reload();
+        }
+      });
+  
+    });
+  });
+
+
+// END DROP
+
+
+
+
+
+
+
+
+
+
+
+  $(document).ready(function() {
+    $('button.edit-btn').click(function(event) {
+        var index = $(event.target).data('index');
+        var input = $('#new' + index);
+        if (input.is(':disabled')) {
+            input.prop('disabled', false);
+        } else {
+            input.prop('disabled', true);
+        }
+        
+    });
+});
+</script>
+
+</script>
+
+
+
+<table class="table">
+  {% block content %}
+  <div class="flaskmessage">
+      {% for message in get_flashed_messages() %}
+      <div class="alert alert-warning alert-dismissible fade show" id="alert"role="alert">
+          {{ message }}
+          <button type="button" class="close" data-dismiss="alert" onclick="$().alert('close')"aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      {% endfor %}
+
+      {% block page_content %}{% endblock %}
+  </div>
+  {% endblock %}
+    <thead class="grey">
+      <tr>
+        <th>Item</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for index, row in enumerate(itemlist) %}
+      <form action="/edititem" method="post">
+        <tr>
+          <td>
+            <div class="fancy-input">
+            <input type="text" value="{{row}}" id="new{{index}}" name="getcompany" disabled>
+            <input type="hidden" value="{{company}}" id="company" name="getcompany">
+            <input type="hidden" value="{{row}}" name="item" id="item{{index}}"></div>
+          </td>
+          <td class="buttonflex">
+            
+            <button class="update-btn" type="button" data-index="{{index}}"><i class="fa-sharp fa-solid fa-pen" style="color: #000000;"></i>UPDATE</button>
+            <button class="delete-btn" type="button" data-index="{{index}}"><i class="fa-sharp fa-solid fa-trash" style="color: #000000;"></i>DELETE</button>
+            <button class="edit-btn" type="button" data-index="{{index}}"><i class="fa-solid fa-pen-to-square" style="color: #000000;"></i>EDIT</button>
+          </td>
+        </tr>
+      </form>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <!-- <a href="# "><i class="fa-sharp fa-solid fa-pen" style="color: #000000;"></i></a>
+  <a href="# "><i class="fa-sharp fa-solid fa-trash" style="color: #000000;"></i></a>
+  <a href="# "><i class="fa-solid fa-pen-to-square" style="color: #000000;"></i></a>   -->

@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+   
+    <script src="https://kit.fontawesome.com/904a5ca53d.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/a42b0eea0f.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="../static/styles/db.css">
+    <link rel="stylesheet" href="../static/styles/item.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   
+    
+    <title>Dashboard</title>
+</head>
+<body>
+    <div class="maincontainer">
+        <div class="side-nav">
+            <div class="flex-sidenav">
+                <div class="sdashboard1">
+                    <img src="../static/img/dbn.png">
+                    <a href="/dashboard">Dashboard</a>
+                </div>
+                <div class="sdashboard">
+                    <i class="fa-solid fa-chart-simple" style="color: #ffffff;"></i>
+                    <a href="item">Analytics</a>
+                </div>
+                <div class="sdashboard1">
+                    <i class="fa-solid fa-user"></i>
+                    <a href="/profile">User Profile</a>
+                </div>
+                <div class="sdashboard1">
+                    <i class="fa-solid fa-database" style="color: #000000;"></i>
+                    <a href="mani">Table</a>
+                </div>
+                <div class="sdashboard1">
+                    <i class="fa-solid fa-gear"></i>
+                    <a href="/management">Database</a>
+                </div>
+            </div>
+            <div class="logoutcontainer">
+                {% if usertype == 'Premium' %}
+                    <p class="usergold">{{usertype}}</p>
+                {% else %}
+                    <p class="userstandard">{{usertype}}</p>
+                {% endif %}
+                <a href="logout"><i class="fa fa-sign-out" aria-hidden="true"></i>LOG OUT</a></div>
+        </div>
+
+        <div class="containerholder">
+       
+            <div class="navbarholder">
+                <div class="flex-nav1">
+                    <input type="text" placeholder="Search for Query">
+                </div>
+                <div class="flex-nav2">
+                    <div class="message">
+                        <img src="../static/img/message.png" alt="Message">
+                    </div>
+                    <div class="notification">
+                        <img src="../static/img/notification.png" alt="Message">
+                    </div>
+                    <div class="profile">
+                    <div class="name">
+                        <p>{{name}}</p>
+                    </div>
+                    <div class="imgprofile">
+                        <img src="../static/img/profile.jpg" alt="">
+                        <i class="fa-sharp fa-solid fa-caret-down"></i>
+                    </div>
+                    
+                </div>
+    
+            </div>
+
+        </div>
+                    
+        <section>
+            <script>
+                $(document).ready(function() {
+                    $('#changeitemlist').change(function() {
+                            var selectedOption = $(this).val();
+                            $.ajax({
+                            url: '/getitemmname',
+                            type: 'POST',
+                            data: {selectedOption: selectedOption},
+                            success: function(response) {
+                                $('#changeItem').text(response.name);
+                            }
+                            });
+                        });
+                        });
+
+
+                
+            </script>
+            <script>
+                $(document).ready(function() {
+                  $('#companylist').change(function() {
+                    var feedbackType = $(this).val();
+                    $.ajax({
+                      url: '/changeitemlist',
+                      type: 'POST',
+                      data: { feedbackType: feedbackType },
+                      success: function(response) {
+                        var options = '';
+                        $.each(response, function(index, value) {
+                            options += '<option value="' + value[1] + '">' + value[1] + '</option>';
+                        });
+                        $('#changeitemlist').html(options);
+                      },
+                      error: function(error) {
+                        console.log(error);
+                      }
+                    });
+                  });
+                });
+              </script>
+            
+
+                 
+            <div class="content-container"> 
+                {% block content %}
+            <div class="flaskmessage">
+                {% for message in get_flashed_messages() %}
+                <div class="alert alert-warning alert-dismissible fade show" id="alert"role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" onclick="$().alert('close')"aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                {% endfor %}
+
+                {% block page_content %}{% endblock %}
+            </div>
+            {% endblock %}
+
+            <div class="headeritem">
+            <h1 class="changeItem" id="changeItem">Item Name</h1>
+        
+            <select class="companylist" id="companylist">
+                {% for wes in companylist %}  
+                <option value= "{{wes}}">{{wes}}</option>
+                {% endfor %} 
+                
+             </select>
+
+                <select class="itemlist" id="changeitemlist">
+                    {% for waw in itemlist %}
+                     <option value="{{waw}}">{{waw}}</option>
+                     {% endfor %}
+                </select>
+          
+            </div>
+
+
+
+            <div class="flexcontent-container" id="flexcontent-container">
+                <div class="flex-stats">
+                    <div class="flexstats1" id="activestats">
+                        <i class="fa-sharp fa-solid fa-gauge"></i>
+                        <h2 id="averagev">0</h2>
+                        <p>Total Percentage</p>
+                        <div class="butttonjump"><i class="fa-solid fa-arrow-up fa-bounce" style="color: #2bb904;"></i> <p>100%</p></div>
+                    </div>
+                    <div class="flexstats1">
+                        <i class="fa-solid fa-face-smile-beam"></i>
+
+                        <h2 id="positivev">0</h2>
+                        <p>Total Positive</p>
+                        <div class="butttonjump"><i class="fa-solid fa-arrow-up fa-bounce" style="color: #2bb904;"></i> <p>100%</p></div>
+                         
+                    </div>
+                    <div class="flexstats1">
+                        <i class="fa-solid fa-face-sad-cry"></i>
+                        <h2 id="negativev">0</h2>
+                         <p>Total Negative</p>
+                         <div class="butttonjump"><i class="fa-solid fa-arrow-up fa-bounce" style="color: #2bb904;"></i> <p>100%</p></div>
+                    </div>
+                 
+                    <div class="flexstats1">
+                        <i class="fa-solid fa-comments"></i>
+                        <h2 id="totalidv">0</h2>
+                        <p>Total Feedback</p>
+                       
+                        <div class="butttonjump"><i class="fa-solid fa-arrow-up fa-bounce" style="color: #2bb904;"></i> <p>100%</p></div>
+                    </div>
+                    <div class="flexstats1">
+                        <i class="fa-solid fa-book"></i>
+                        <h2 id="todaycomment">0</h2>
+                         <p>Latest Comment</p>
+                         <div class="butttonjump"><i class="fa-solid fa-arrow-up fa-bounce" style="color: #2bb904;"></i> <p>100%</p></div>
+                    </div class="flexstats1">
+                </div>
+
+                <div class="flex-graph">
+                    <div class="fgraph">
+                        <h3 class="msfeedback">Monthly Sentiment Feeback</h3>
+                        <div class="chartbar">
+                            <canvas id="myChart5" class="chart5" height="600"width="1860"></canvas>
+
+                                </div>
+                       
+                    </div>
+                    <div class="sgraph">
+                        <div class="chartcontainer">
+                         <h3 class="dStats"><i class="fa-solid fa-chart-waterfall fa-fade" style="color: #000000;"></i>Daily Stats</h3>
+                         <div class="chartcontent">
+                            <canvas class= "chart" id="myChart" ></canvas>
+                            <script>
+                            const ctx = document.getElementById('myChart');
+                                
+                               var chart = new Chart(ctx, {
+                                    type: 'line',
+                                    bodyColor: '#000000',
+
+                                    data: {
+                                    labels: [ {%for d in listdate %}
+                                        '{{d}}', {% endfor %}]
+                                        ,
+                                    datasets: [{
+                                        label: 'POSITIVE',
+                                        data: [],
+                                        borderWidth: 2,
+                                        backgroundColor: '#000000',
+                                        borderColor: '#000000',
+                                    },
+                                    {
+                                        label: 'NEGATIVE',
+                                        data: [],
+                                        borderWidth: 2,
+                                        backgroundColor: '#c1c1c1',
+                                        borderColor: '#c1c1c1',
+                                    }
+                                ]
+                                    },
+                                });
+                                
+                            $(document).ready(function() {
+                            $('#changeitemlist').change(function()  {
+                                var selectedHeader = $('#changeitemlist').val();
+                                var company = $('#companylist').val();
+                                $.ajax({
+                                    url: '/itemtable1',
+                                    type: 'POST',
+                                    data: {type: selectedHeader,company:company},
+                                    dataType: 'json',
+                                    success: function(response) {
+                                        $('#positivev').text(response.positive);
+                                        $('#negativev').text(response.negative);
+                                        $('#totalidv').text(response.total);
+                                        $('#averagev').text(response.average);                            
+                                        updateChart(response.listvalue,response.listneg);
+                                        // updateChart1(response.monthspositive);
+                                        updateChart1(response.monthspositive,response.monthsNegative);
+                                        
+                                    },
+                                    error: function(error) {
+                                        console.log(error);
+                                    }
+                                });
+                            });
+                        });
+
+
+
+                        $(document).ready(function() {
+                            var selectedHeader = $('#changeitemlist').val();
+                            var company = $('#companylist').val();
+                                $.ajax({
+                                    url: '/itemtable1',
+                                    type: 'POST',
+                                    data: {type: selectedHeader,company:company},
+                                    dataType: 'json',
+                                    success: function(response) {
+                                        $('#positivev').text(response.positive);
+                                        $('#negativev').text(response.negative);
+                                        $('#totalidv').text(response.total);
+                                        $('#averagev').text(response.average);
+                                        $('#todaycomment').text(response.latestcomment);
+                                        updateChart(response.listvalue,response.listneg);
+                                        updateChart1(response.monthspositive,response.monthsNegative);
+                                     
+                                        
+                                    },
+                                    error: function(error) {
+                                        console.log(error);
+                                    }
+                                });
+                            });
+
+
+                                
+                        function updateChart1(monthspositive,monthsNegative) {
+                        // Get the chart object
+                        myChart.data.datasets[0].data = monthspositive;
+                        myChart.data.datasets[1].data = monthsNegative;
+                        myChart.update();
+                        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        function updateChart(newData,neg) {
+                        // Get the chart object
+                        chart.data.datasets[0].data = newData;
+                        chart.data.datasets[1].data = neg;
+                        chart.update();
+                        }          
+                                
+                                </script>
+                         </div>
+                        
+
+
+
+                         
+   
+                        </div>
+                    </div>
+                </div>
+             
+               
+                <div class="mainlcheader">
+                    <div class="lcheader">
+                        <p class="name">Name</p>
+                        <p class="feedback"   >Feedback</p>
+                        <p class="date">Date</p>
+                        <p class="time">Time</p>
+                        <p class="Sentiment">Sentiment</p>
+                    </div>
+
+                <div class="latestcomment">
+                    
+                    <div>
+                        <p class="name">{{latestc1.name}}</p>
+                        <p class="feedback">{{fb1}}</p>
+                        <p class="date">{{latestc1.date}}</p>
+                        <p class="time">{{latestc1.time}}</p>
+                        <p class="Sentiment">{{latestc1.sentiment}}</p>
+                    </div>
+                    <div>
+                        <p class="name">{{latestc2.name}}</p>
+                        <p class="feedback">{{fb2}}</p>
+                        <p class="date">{{latestc2.date}}</p>
+                        <p class="time">{{latestc2.time}}</p>
+                        <p class="Sentiment">{{latestc2.sentiment}}</p>
+                    </div>
+                 
+                </div>    
+                </div>
+            </div>
+      </section>
+    </div>
+
+
+    </div>
+  
+    <script>
+        const ctxa = document.getElementById('myChart5').getContext('2d');
+        var myChart = new Chart(ctxa, {
+            type: 'bar',
+            data: {
+                labels: ['January', 'February', 'March', 'April', 'May'],
+                datasets: [{
+                    label: 'Positive',
+                    data: [12, 19, 3, 5, 2],
+                    backgroundColor: '#000000',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                }, {
+                    label: 'Negative',
+                    data: [8, 6, 9, 11, 7],
+                    backgroundColor: '#c1c1c1',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
+</body>
+</html>

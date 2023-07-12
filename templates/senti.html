@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/styles/sentiment.css">
+    <title>Sentiment Analysis</title>
+</head>
+<body>
+
+    <header>
+        <nav class="navigator">
+            <div class="nav-container" id="navigator">
+            <img src="../static/img/logo-m.png">
+            <ul>
+                <li><a href="gotoindex">Home</a></li>
+                <li><a href="gotoindex">About us</a></li>
+                <li><a href="gotoindex">Contact us</a></li>
+                <li><a href="gotoindex">Sentiment Analysis</a></li>
+           </ul>
+           <div class="btn">
+           <form action="login">
+           <button type="submit" id="login" class="login">LOGIN</button>
+           </form>
+           <form action="login.php">
+           <button type="submit" class="signup">SIGNUP</button>
+            </form>
+           </div>
+           </div>
+        </nav>
+        </header>
+
+
+
+     <section>
+        <form action="{{ url_for('predict') }}" method="POST">
+        <div class="sentiment-container">
+            <h3 class="head">Sentiment Analyzer</h1>
+            <p class="head-1">Use sentiment analysis to quickly <br>detect emotions in text data.<p>
+            <p class="head-2">Play around with our sentiment analyzer, below:</p>
+        </div>
+        
+        <div class="main-wrapper">
+            <div class="flex-1">
+                    <h1>Test with your own text</h1>
+                    <textarea id="review" name="review" rows = "12"required autofocus placeholder="Input your Text here ..." >{{realtext}}</textarea>
+                    <br>
+                    <div class="classify">
+                    <button type="submit">Classify</button>
+                 
+                    </div>
+
+            </div>
+
+            <div class="flex-2">
+                <h1>Result</h1>
+                <p class="tag">Tag</p>
+                <hr>
+                <p class="result">{{result}}</p>
+                <hr> 
+            </div>
+        </div>
+    </form>
+    </section>
+
+    
+</body>
+</html>

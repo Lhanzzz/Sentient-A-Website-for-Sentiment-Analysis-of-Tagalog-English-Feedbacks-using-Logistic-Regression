@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <script src="https://kit.fontawesome.com/904a5ca53d.js" crossorigin="anonymous"></script>
+    
+    <link rel="stylesheet" href="../static/styles/db.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <link rel="stylesheet" href="../static/styles/profile.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <script>            
+        $(document).ready(function(){
+
+            $.ajax
+            ({
+            url: '/profileupdate',
+            type: 'POST',
+             success: function(data){
+                $('#inputUsername').val(data[0][1]);
+                $('#inputFirstName').val(data[0][4]);
+                $('#inputLastName').val(data[0][5]);
+                $('#inputCurrentpassword').val(data[0][2]);
+                $('#inputEmailAddress').val(data[0][6]);
+                $('#inputPhone').val(data[0][7]);
+             }
+            });
+        });
+        $(document).ready(function(){
+            $("#updateclick").click(function(){
+                var cpassword = $('#inputCurrentpassword').val();
+                var fname = $('#inputFirstName').val();
+                var lname = $('#inputLastName').val();
+                var password = $('#inputNewpassword').val();
+                var email = $('#inputEmailAddress').val();
+                
+                $.ajax({
+                    url: '/profilechange',
+                    type: 'POST',
+                    data:{firstname:fname,lname:lname,password:password,email:email,cpassword:cpassword},
+                    success: function(data){
+                        $('#inputCurrentpassword').val(data.password);
+                        $('#inputNewpassword').val('');
+                    }
+
+                });
+            });
+        });
+
+
+
+
+        $(document).ready(function() {
+    $("#show_hide_password a").on('click', function(event) {
+        event.preventDefault();
+        if($('#show_hide_password input').attr("type") == "text"){
+            $('#show_hide_password input').attr('type', 'password');
+            $('#show_hide_password i').addClass( "fa-eye-slash" );
+            $('#show_hide_password i').removeClass( "fa-eye" );
+        }else if($('#show_hide_password input').attr("type") == "password"){
+            $('#show_hide_password input').attr('type', 'text');
+            $('#show_hide_password i').removeClass( "fa-eye-slash" );
+            $('#show_hide_password i').addClass( "fa-eye" );
+        }
+    });
+});
+    
+        
+    
+    
+    
+    
+    
+    
+    </script>
+    <div class="maincontainer" id="mani">
+        <div class="side-nav">
+            <div class="flex-sidenav">
+                <div class="sdashboard1">
+                    <img src="../static/img/dbn.png">
+                    <a href="/dashboard">Dashboard</a>
+                </div>
+                <div class="sdashboard1">
+                    <i class="fa-sharp fa-solid fa-chart-simple"></i>
+                    <a href="item">Analytics</a>
+                </div>
+                <div class="sdashboard">
+                    <i class="fa-solid fa-user"></i>
+                    <a href="/profile">User Profile</a>
+                </div>
+                <div class="sdashboard1">
+                    <i class="fa-solid fa-database" style="color: #000000;"></i>
+                    <a href="/mani">Table</a>
+                </div>
+                <div class="sdashboard1">
+                    <i class="fa-solid fa-gear"></i>
+                    <a href="/management">Database</a>
+                </div>
+            </div>
+            <div class="logoutcontainer"><a href="logout"><i class="fa fa-sign-out" aria-hidden="true"></i>LOG OUT</a></div>
+        </div>
+
+        <div class="containerholder">
+            <div class="navbarholder">
+                <div class="flex-nav1">
+                    <input type="text" placeholder="Search for Query">
+                </div>
+                <div class="flex-nav2">
+                    <div class="message">
+                        <img src="../static/img/message.png" alt="Message">
+                    </div>
+                    <div class="notification">
+                        <img src="../static/img/notification.png" alt="Message">
+                    </div>
+                    <div class="profile">
+                    <div class="name">
+                        <p>{{name}}</p>
+                    </div>
+                    <div class="imgprofile">
+                        <img src="../static/img/profile.jpg" alt="">
+                    </div>
+                    
+                </div>
+                </div>
+            </div>
+
+            
+
+                <div class="mainusercontainer">
+
+                <!-- START USER PAGE -->
+                <div id="size"class="container-xl px-4 mt-4">
+                    <!-- Account page navigation-->
+                    <div class="row">
+                        <div class="col-xl-4">
+                            <!-- Profile picture card-->
+                            <div class="card mb-4 mb-xl-0">
+                                <div class="card-header">Profile Picture</div>
+                                <div class="card-body text-center">
+                                    <!-- Profile picture image-->
+                                    <img class="img-account-profile rounded-circle mb-2" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="">
+                                    <!-- Profile picture help block-->
+                                    <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
+                                    <!-- Profile picture upload button-->
+                                    <button class="btn btn-primary" type="button">Upload new image</button>
+                                    
+                                </div>
+                            </div>
+                            <div class="subtop">
+                            <div class="card mb-4 mb-xl-0">
+                                <div class="card-header">Subcription Details</div>
+                                <div class="card-body text-center">
+                                        {% if usertype =='Premium' %}
+                                            <p class="userTypegold">{{usertype}}</p>
+                                        {% else %}
+                                            <p class="userType">{{usertype}}</p>
+                                        {% endif %}
+                                     <button class="btn btn-primary" >Purchase Plan</button>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="col-xl-8" id="accountInformation">
+                            <!-- Account details card-->
+                            <div class="card mb-4">
+                                <div class="card-header">Account Details</div>
+                                <div class="card-body">
+                                        <!-- Form Group (username)-->
+                                        <div class="mb-3">
+                                            <label class="small mb-1" for="inputUsername">Username (how your name will appear to other users on the site)</label>
+                                            <input class="form-control" id="inputUsername" type="text" placeholder="Enter your username" value="username" disabled>
+                                        </div>
+                                        <!-- Form Row-->
+                                        <div class="row gx-3 mb-3">
+                                            <!-- Form Group (first name)-->
+                                            <div class="col-md-6">
+                                                <label class="small mb-1" for="inputFirstName">First name</label>
+                                                <input class="form-control" id="inputFirstName" type="text" placeholder="Enter your first name">
+                                            </div>
+                                            <!-- Form Group (last name)-->
+                                            <div class="col-md-6">
+                                                <label class="small mb-1" for="inputLastName">Last name</label>
+                                                <input class="form-control" id="inputLastName" type="text" placeholder="Enter your last name">
+                                            </div>
+                                        </div>
+                                        <!-- Form Row        -->
+                                        <div class="row gx-3 mb-3">
+                                            <!-- Form Group (organization name)-->
+                                            <div class="col-md-6">
+                                                <label class="small mb-1" for="inputCurrentpassword">Current Password</label>
+                                                <div class="form-control" id="show_hide_password">
+                                                    <input class="" id="inputCurrentpassword" type="password" disabled>
+                                                    <div class="input-group-addon">
+                                                      <a href=""><i class="fa fa-eye-slash" aria-hidden="true"></i></a>
+                                                    </div>
+                                                  </div>
+                                            
+                                                <!-- <input class="form-control" id="inputCurrentpassword" type="text" placeholder="Enter your organization name" value="Start Bootstrap"> -->
+                                            </div>
+                                            <!-- Form Group (location)-->
+                                            <div class="col-md-6">
+                                                <label class="small mb-1" for="inputNewpassword">New Password</label>
+                                                <input class="form-control" id="inputNewpassword" type="text" placeholder="Enter New Password" >
+                                            </div>
+                                        </div>
+                                        <!-- Form Group (email address)-->
+                                        <div class="mb-3">
+                                            <label class="small mb-1" for="inputEmailAddress">Email address</label>
+                                            <input class="form-control" id="inputEmailAddress" type="email" placeholder="Enter your email address" >
+                                        </div>
+                                        <!-- Form Row-->
+                                        <div class="row gx-3 mb-3">
+                                            <!-- Form Group (phone number)-->
+                                            <div class="col-md-6">
+                                                <label class="small mb-1" for="inputPhone">Phone number</label>
+                                                <input class="form-control" id="inputPhone" type="tel" placeholder="Enter your phone number">
+                                            </div>
+                                            <!-- Form Group (birthday)-->
+                                            <div class="col-md-6">
+                                                <label class="small mb-1" for="inputBirthday">Birthday</label>
+                                                <input class="form-control" id="inputBirthday" type="text" name="birthday" placeholder="Enter your birthday" value="06/10/1988">
+                                            </div>
+                                        </div>
+                                        <!-- Save changes button-->
+                                        <button class="btn btn-primary" id="updateclick" type="button">Save changes</button>
+                                  
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+                <!-- END -->
+        </div>
+
+        </div>
+
+</body>
+</html>

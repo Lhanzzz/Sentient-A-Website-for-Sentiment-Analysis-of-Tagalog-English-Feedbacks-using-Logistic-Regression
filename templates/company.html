@@ -1,0 +1,75 @@
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+       $(document).ready(function(){
+            $('#companydrop').click(function(){
+               company = $('#companydropval').val();
+                $.ajax({
+                    url:'/dropcompany',
+                    type:'POST',
+                    data:{company:company},
+                    success: function(data){
+                        location.reload();
+                    }
+                });
+            });
+        });
+
+        $(document).ready(function(){
+            $('#companyupdate').click(function(){
+               company = $('#companydropval').val();
+               cvalue = $('#companyupdate').val();
+                $.ajax({
+                    url:'/companyupdate',
+                    type:'POST',
+                    data:{company:company,cvalue:cvalue},
+                    success: function(data){
+                        location.reload();
+                    }
+                });
+            });
+        });
+
+    
+
+</script>
+
+
+<Table class="table">
+    {% block content %}
+  <div class="flaskmessage">
+      {% for message in get_flashed_messages() %}
+      <div class="alert alert-warning alert-dismissible fade show" id="alert"role="alert">
+          {{ message }}
+          <button type="button" class="close" data-dismiss="alert" onclick="$().alert('close')"aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      {% endfor %}
+
+      {% block page_content %}{% endblock %}
+  </div>
+  {% endblock %}
+    <thead class="grey">
+    <tr>
+        <th>Enterprise Name</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+        
+        
+
+    <tr>
+        <td> <div class="fancy-input"><input type="text" id="companydropval" name ="companydropval" value="{{company[1]}}"></td></div>
+        <td><button value="{{company[1]}}" id ="companyupdate"><i class="fa-sharp fa-solid fa-pen" style="color: #000000;"></i>UPDATE</button><button id="companydrop"><i class="fa-sharp fa-solid fa-trash" style="color: #000000;"> </i>DELETE</button><button "><i class="fa-solid fa-pen-to-square" style="color: #000000;"></i>EDIT</button></td>
+    </tr>
+        
+
+
+    </tbody>
+</Table>
+
+
+
+
+

@@ -1,0 +1,169 @@
+
+
+<div class="flexcontent-container">
+    <div class="flex-stats">
+        <div id="activestats">
+            <i class="fa-sharp fa-solid fa-gauge"></i>
+            <h2>{{average}}</h2>
+            <p>Total Avegage</p>
+            <p><i class="fa-solid fa-arrow-up fa-bounce" style="color: #2bb904;"></i> 100%</p>
+        </div>
+        <div>
+            <i class="fa-solid fa-face-smile-beam"></i>
+
+            <h2>{{positive}}</h2>
+            <p>Total Positive</p>
+             <p><i class="fa-solid fa-arrow-up fa-bounce" style="color: #2bb904;"></i> 100%</p>
+             
+        </div>
+        <div>
+            <i class="fa-solid fa-face-sad-cry"></i>
+            <h2>{{negative}}</h2>
+             <p>Total Negative</p>
+             <p><i class="fa-solid fa-arrow-up fa-bounce" style="color: #2bb904;"></i> 100%</p>
+        </div>
+     
+        <div>
+            <i class="fa-solid fa-book"></i>
+            <h2>{{lastrow}}</h2>
+             <p>Total Items</p>
+             <p><i class="fa-solid fa-arrow-up fa-bounce" style="color: #2bb904;"></i> 100%</p>
+        </div>
+        <div>
+            <i class="fa-solid fa-comments"></i>
+            <h2>{{total}}</h2>
+             <p>Total Feedback</p>
+             <p><i class="fa-solid fa-arrow-up fa-bounce" style="color: #2bb904;"></i> 100%</p>
+        </div>
+    </div>
+
+    <div class="flex-graph">
+        <div class="fgraph">
+            <h3>Lorem ipsum dolor sit amet.</h3>
+            <div class="chartbar">
+                <div id="chartContainer" style="height: 100%; width: 90%;"></div></div>
+            
+        </div>
+        <div class="sgraph">
+            <div class="chartcontainer">
+             <h3>Today Stats</h3>
+             <div class="chartcontent">
+                <canvas class= "chart" id="myChart" ></canvas>
+             </div>
+            
+            <script>
+                const ctx = document.getElementById('myChart');
+                    
+                    new Chart(ctx, {
+                        type: 'line',
+                        bodyColor: '#000000',
+
+                        data: {
+                        labels: [ {%for d in listdate %}
+                            '{{d}}', {% endfor %}]
+                            ,
+                        datasets: [{
+                            label: 'POSITIVE',
+                            data: [ {%for d in listvalue %}
+                            '{{d}}', {% endfor %}],
+                            borderWidth: 2,
+                            backgroundColor: '#000000',
+                            borderColor: '#000000',
+                        },
+                        {
+                            label: 'NEGATIVE',
+                            data: [{%for d in listneg %}
+                            '{{d}}', {% endfor %}],
+                            borderWidth: 2,
+                            backgroundColor: '#c1c1c1',
+                            borderColor: '#c1c1c1',
+                        }
+                    ]
+                        },
+                    });
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                // var xValues = ["Postive", "Negative"];
+                // var yValues = [ {{donutpositive}},  {{donutnegative}}];
+                // var barColors = [
+                // "#111111",
+                // "#d4d4d4"
+                
+                // ];
+                
+                // new Chart("myChart", {
+                // type: "doughnut",
+                // data: {
+                //     labels: xValues,
+                //     datasets: [{
+                //     backgroundColor: barColors,
+                //     data: yValues
+                //     }]
+                // },
+                // options: {
+                //     title: {
+                //     display: true,
+                //     text: ""
+                //     }
+                // }
+                // });
+            </script>     
+            </div>
+        </div>
+    </div>
+ 
+   
+    <div class="mainlcheader">
+        <div class="lcheader">
+            <p class="name">Name</p>
+            <p class="feedback"   >Feedback</p>
+            <p class="date">Date</p>
+            <p class="time">Time</p>
+            <p class="Sentiment">Sentiment</p>
+        </div>
+
+    <div class="latestcomment">
+        
+        <div>
+            <p class="name">{{latestc1.name}}</p>
+            <p class="feedback">{{fb1}}</p>
+            <p class="date">{{latestc1.date}}</p>
+            <p class="time">{{latestc1.time}}</p>
+            <p class="Sentiment">{{latestc1.sentiment}}</p>
+        </div>
+        <div>
+            <p class="name">{{latestc2.name}}</p>
+            <p class="feedback">{{fb2}}</p>
+            <p class="date">{{latestc2.date}}</p>
+            <p class="time">{{latestc2.time}}</p>
+            <p class="Sentiment">{{latestc2.sentiment}}</p>
+        </div>
+     
+    </div>    
+    </div>
+</div>

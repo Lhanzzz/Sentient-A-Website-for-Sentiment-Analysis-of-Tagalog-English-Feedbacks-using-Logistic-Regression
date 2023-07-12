@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+   
+    <script src="https://kit.fontawesome.com/904a5ca53d.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/a42b0eea0f.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="../static/styles/db.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../static/register.js"></script>
+    
+    <title>Dashboard</title>
+</head>
+<body id="weqweqweqweqwe">
+
+  <script>
+
+
+  
+    
+        
+        $(document).ready(function() {
+          var selectedValue = $('#getcompany').val();
+          $.ajax({
+            url: '/changeitem',
+            type: 'POST',
+            data: {feedbackType: selectedValue},
+            success: function(response) {
+            $('#positivev').text(response.positive);
+            $('#negativev').text(response.negative);
+            $('#totalv').text(response.total);
+            $('#countitemv').text(response.countitem);
+            $('#averagev').text(response.totaltemp);
+              var feed = response.last_record[2];
+              var feed2 = response.second_record[2];
+              var count = 45;
+              var result = feed.slice(0, count) + (feed.length > count ? "..." : "");
+              var result1 = feed2.slice(0, count) + (feed2.length > count ? "..." : "");
+           
+            $('#name1').text(response.last_record[1]);
+            $('#feedback1').text(result);
+            $('#date1').text(response.last_record[3]);
+            $('#time1').text(response.last_record[4]);
+            $('#sentiment1').text(response.last_record[7]);
+            $('#name2').text(response.second_record[1]);
+            $('#feedback2').text(result1);
+            $('#date2').text(response.second_record[3]);
+            $('#time2').text(response.second_record[4]);
+            $('#sentiment2').text(response.second_record[7]);
+            updateChart(response.listvalue,response.listneg);
+    
+            },
+            error: function(xhr, status, error) {
+              console.log(error);
+            }
+          });
+        });
+    
+        function updateChart(newData,neg) {
+                            // Get the chart object
+                            chart.data.datasets[0].data = newData;
+                            chart.data.datasets[1].data = neg;
+                            chart.update();
+                            }  
+            </script>
+
+    <script>
+        
+         $(document).ready(function() {
+                  $('#getcompany').change(function() {
+                    var feedbackType = $(this).val();
+                    $.ajax({
+                      url: '/changeitem1',
+                      type: 'POST',
+                      data: { feedbackType: feedbackType },
+                      success: function(response) {
+                        var options = '';
+                        $.each(response.listitem, function(index, value) {
+                            options += '<option value="' + value + '">' + value + '</option>';
+                        });
+                        $('#itemeqweqw').html(options);
+                        $('#modalgetitem').html(options)
+                        updateChartlabel(response.listallitem,response.listallitemaverage)
+                      },
+                      error: function(error) {
+                        console.log(error);
+                      }
+                    });
+                  });
+                });
+
+
+              // FOR MODAL ON CHANGE COMPANY TO CHANGE THE ITEM
+              $(document).ready(function() {
+                  $('#getcompany1').change(function() {
+                    var feedbackType = $(this).val();
+                    $.ajax({
+                      url: '/changeitem1',
+                      type: 'POST',
+                      data: { feedbackType: feedbackType },
+                      success: function(response) {
+                        var options = '';
+                        $.each(response.listitem, function(index, value) {
+                            options += '<option value="' + value + '">' + value + '</option>';
+                        });
+                        $('#modalgetitem').html(options)
+                        
+                      },
+                      error: function(error) {
+                        console.log(error);
+                      }
+                    });
+                  });
+                });
+               // MODAL END
+
+            
+
+
+
+
+
+
+
+
+
+
+               $(document).ready(function() {
+                    var feedbackType = $(this).val();
+                    $.ajax({
+                      url: '/changeitem1',
+                      type: 'POST',
+                      data: { feedbackType: feedbackType },
+                      success: function(response) {
+                        var options = '';
+                        $.each(response.listitem, function(index, value) {
+                            options += '<option value="' + value + '">' + value + '</option>';
+                        });
+                        $('#modalgetitem').html(options)
+                        
+                      },
+                      error: function(error) {
+                        console.log(error);
+                      }
+                    });
+                  });
+  
+
+ 
+function updateChartlabel(data,value) {
+                        
+                        vchart.data.labels = data;
+                        vchart.data.datasets[0].data = value;
+                        vchart.update();
+                        }  
+
+
+                $(document).ready(function() {
+                  $('#getcompany').change(function() {
+                    var feedbackType = $(this).val();
+                    $.ajax({
+                      url: '/changeitem',
+                      type: 'POST',
+                      data: { feedbackType: feedbackType },
+                      success: function(response) {
+                        $('#positivev').text(response.positive);
+                        $('#negativev').text(response.negative);
+                        $('#totalv').text(response.total);
+                        $('#countitemv').text(response.countitem);
+                        $('#averagev').text(response.totaltemp);
+                        var feed = response.last_record[2];
+                        var feed2 = response.second_record[2];
+                        var count = 45;
+                        var result = feed.slice(0, count) + (feed.length > count ? "..." : "");
+                        var result1 = feed2.slice(0, count) + (feed2.length > count ? "..." : "");
+                       
+                        $('#name1').text(response.last_record[1]);
+                        $('#feedback1').text(result);
+                        $('#date1').text(response.last_record[3]);
+                        $('#time1').text(response.last_record[4]);
+                        $('#sentiment1').text(response.last_record[7]);
+                        $('#name2').text(response.second_record[1]);
+                        $('#feedback2').text(result1);
+                        $('#date2').text(response.second_record[3]);
+                        $('#time2').text(response.second_record[4]);
+                        $('#sentiment2').text(response.second_record[7]);
+                        updateChart(response.listvalue,response.listneg);
+                      },
+                      error: function(error) {
+                        console.log(error);
+                      }
+                    });
+                  });
+                });
+                
+                function updateChart(newData,neg) {
+                        // Get the chart object
+                        chart.data.datasets[0].data = newData;
+                        chart.data.datasets[1].data = neg;
+                        chart.update();
+                        } 
+
+
+                  
+                    
+
+  </script>
+
+
+
+<script>
+
+                 
+</script>
+
+
+    <div class="maincontainer">
+        <div class="side-nav">
+            <div class="flex-sidenav">
+                <div class="sdashboard">
+                    <img src="../static/img/dbn.png">
+                    <a href="#">Dashboard</a>
+                </div>
+                <div class="sdashboard1">
+                    <i class="fa-sharp fa-solid fa-chart-simple"></i>
+                    <a href="item">Analytics</a>
+                </div>
+                <div class="sdashboard1">
+                    <i class="fa-solid fa-user"></i>
+                    <a href="/profile">User Profile</a>
+                </div>
+                <div class="sdashboard1">
+                    <i class="fa-solid fa-database" style="color: #000000;"></i>
+                    <a href="mani">Table</a>
+                </div>
+                <div class="sdashboard1">
+                    <i class="fa-solid fa-gear"></i>
+                    <a href="/management">Database</a>
+                </div>
+            </div>
+              <div class="logoutcontainer">
+                {% if usertype == 'Premium' %}
+                    <p class="usergold">{{usertype}}</p>
+                {% else %}
+                    <p class="userstandard">{{usertype}}</p>
+                {% endif %}
+                <a href="logout"><i class="fa fa-sign-out" aria-hidden="true"></i>LOG OUT</a></div>
+        </div>
+        
+        <div class="containerholder">
+       
+            <div class="navbarholder">
+                <div class="flex-nav1">
+                    <input type="text" placeholder="Search for Query">
+                </div>
+                <div class="flex-nav2">
+                    <div class="message">
+                        <img src="../static/img/message.png" alt="Message">
+                    </div>
+                    <div class="notification">
+                        <img src="../static/img/notification.png" alt="Message">
+                    </div>
+                    <div class="profile">
+                    <div class="name">
+                        <p>{{name}}</p>
+                    </div>
+                    <div class="imgprofile">
+                        <img src="../static/img/profile.jpg" alt="">
+                    </div>
+                    
+                </div>
+    
+            </div>
+
+        </div>
+                    
+        <section>
+            {% block content %}
+            <div class="flaskmessage">
+                {% for message in get_flashed_messages() %}
+                <div class="alert alert-warning alert-dismissible fade show" id="alert"role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" onclick="$().alert('close')"aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                {% endfor %}
+
+                {% block page_content %}{% endblock %}
+            </div>
+            {% endblock %}
+            <script type="text/javascript">
+
+                  
+
+
+
+    setTimeout(function () {
+
+    // Closing the alert
+    $('#alert').alert('close');
+    }, 5000);          
+    </script>
+
+            <div class="content-container"> 
+            <div class="formflex1"> 
+            <form class="openfile" action="uploadfile" method="POST" enctype="multipart/form-data">
+            <h1>Overview</h1>
+            <div>
+            <select name="getcompany" id="getcompany">
+                {% for company in company %}
+                <option  value="{{company['companyname']}}">{{company['companyname']}}</option>
+                  {% endfor %}
+            </select>
+            </div>
+            <select name="getitem" id="itemeqweqw" >
+            </select>
+        
+            <div class="mb-3" id="FilterForm">
+              
+                <input class="form-control" type="file" name= "file">
+              </div>
+            <input class="submiter"type="submit" value="Submit" id="submit">
+           
+            </form>
+            <button onclick="addmore()" class="addmore"id="buttonaddmore" value="1"><i class="fa-solid fa-plus fa-beat-fade" style="color: #000000;"></i></button>
+            </div>
+            <div class="flexcontent-container">
+                <div class="flex-stats">
+                    <div class="flexstats1" id="activestats">
+                        <i class="fa-sharp fa-solid fa-gauge"></i>
+                        <h2 id="averagev">0</h2>
+                        <p>Total Percentage</p>
+                        <div class="butttonjump"><i class="fa-solid fa-arrow-up fa-bounce" style="color: #2bb904;"></i> <p>100%</p></div>
+                    </div>
+                    <div class="flexstats1">
+                        <i class="fa-solid fa-face-smile-beam"></i>
+
+                        <h2 id="positivev">0</h2>
+                        <p>Total Positive</p>
+                        <div class="butttonjump"><i class="fa-solid fa-arrow-up fa-bounce" style="color: #2bb904;"></i> <p>100%</p></div>
+                         
+                    </div>
+                    <div class="flexstats1">
+                        <i class="fa-solid fa-face-sad-cry"></i>
+                        <h2 id ="negativev">0</h2>
+                         <p>Total Negative</p>
+                         <div class="butttonjump"><i class="fa-solid fa-arrow-up fa-bounce" style="color: #2bb904;"></i> <p>100%</p></div>
+                    </div>
+                    <div class="flexstats1">
+                      <i class="fa-solid fa-comments"></i>
+                      <h2 id="totalv" >0</h2>
+                       <p>Total Feedback</p>
+                       <div class="butttonjump"><i class="fa-solid fa-arrow-up fa-bounce" style="color: #2bb904;"></i> <p>100%</p></div>
+                  </div>
+                 
+                    <div class="flexstats1">
+                        <i class="fa-solid fa-book"></i>
+                        <h2 id="countitemv">0</h2>
+                         <p>Total Items</p>
+                         <div class="butttonjump"><i class="fa-solid fa-arrow-up fa-bounce" style="color: #2bb904;"></i> <p>100%</p></div>
+                    </div>
+                   
+                </div>
+
+                <div class="flex-graph">
+                    <div class="fgraph">
+                        <h3 class="dStats">Percentage of Total Items</h3>
+                        <div class="chartbar">
+                            <canvas id="myChart1" style="display: block;box-sizing: border-box;height: 261px;/* width: 94%; */"></canvas></div>
+                            <script>
+
+                                const ctx1 = document.getElementById('myChart1');
+                              
+                               var vchart = new Chart(ctx1, {
+                                  type: 'bar',
+                                  data: {
+                                   
+                                    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                                    datasets: [{
+                                      label: '% of Items',
+                                      data: [12, 19, 3, 5, 2, 3],
+                                      borderWidth: 2,
+                                      backgroundColor: 'black',
+                                      borderColor: 'black',
+                                      borderRadius: 100,
+                                      borderSkipped: false,
+                                      barPercentage:0.65,
+                                      color: 'black'
+                                    }]
+                                  },
+                                  options: {
+                                    indexAxis: 'y',
+                                    scales: {
+                              
+                                      y: {
+                                        beginAtZero: true
+                                      }
+                                    }
+                                  }
+                                });
+                              </script>
+
+
+
+                           
+                    </div>
+                    <div class="sgraph">
+                        <div class="chartcontainer">
+                          <h3 class="dStats">Daily Stats</h3>
+                         <div class="chartcontent">
+                            <canvas class= "chart" id="myChart" ></canvas>
+                         </div>
+                        
+                        <script>
+                            const ctx = document.getElementById('myChart');
+                                
+                               var chart = new Chart(ctx, {
+                                    type: 'line',
+                                    bodyColor: '#000000',
+
+                                    data: {
+                                    labels: [ {%for d in listdate %}
+                                        '{{d}}', {% endfor %}]
+                                        ,
+                                    datasets: [{
+                                        label: 'POSITIVE',
+                                        data: [],
+                                        borderWidth: 2,
+                                        backgroundColor: '#000000',
+                            
+                                        borderColor: '#000000',
+                                    },
+                                    {
+                                        label: 'NEGATIVE',
+                                        data: [],
+                                        borderWidth: 2,
+                                    
+                                        backgroundColor: '#c1c1c1',
+                                        borderColor: '#c1c1c1',
+                                    }
+                                ]
+                                    },
+                                });
+                        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                            // var xValues = ["Postive", "Negative"];
+                            // var yValues = [ {{donutpositive}},  {{donutnegative}}];
+                            // var barColors = [
+                            // "#111111",
+                            // "#d4d4d4"
+                            
+                            // ];
+                            
+                            // new Chart("myChart", {
+                            // type: "doughnut",
+                            // data: {
+                            //     labels: xValues,
+                            //     datasets: [{
+                            //     backgroundColor: barColors,
+                            //     data: yValues
+                            //     }]
+                            // },
+                            // options: {
+                            //     title: {
+                            //     display: true,
+                            //     text: ""
+                            //     }
+                            // }
+                            // });
+                        </script>     
+                        </div>
+                    </div>
+                </div>
+             
+               
+                <div class="mainlcheader">
+                    <div class="lcheader">
+                        <p class="name">Name</p>
+                        <p class="feedback"   >Feedback</p>
+                        <p class="date">Date</p>
+                        <p class="time">Time</p>
+                        <p class="Sentiment">Sentiment</p>
+                    </div>
+
+                <div class="latestcomment">
+                    
+                    <div>
+                        <p id="name1"class="name"></p>
+                        <p id="feedback1"class="feedback"></p>
+                        <p id="date1"class="date"></p>
+                        <p id="time1"class="time"></p>
+                        <p id="sentiment1"class="Sentiment"></p>
+                    </div>
+                    <div>
+                        <p id="name2" class="name"></p>
+                        <p id="feedback2" class="feedback"></p>
+                        <p id="date2"class="date"></p>
+                        <p id="time2"class="time"></p>
+                        <p id="sentiment2"class="Sentiment"></p>
+                    </div>
+                 
+                </div>    
+                </div>
+            </div>
+      </section>
+    </div>
+
+
+    </div>
+   
+
+  <button type="button"  data-bs-toggle="modal" data-bs-target="#staticBackdrop" class="addShoppe">
+        <span class="AddShop"><i class="fa-solid fa-plus fa-beat-fade"></i></span>
+        <span class="Shoptext">Add More</span>
+  </button>
+
+ 
+<!-- Modal -->
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog  modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Shoppe API</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+       <form action="shoppe" method="post">
+            <div class="modal-item">
+              <h3>Insert Into</h3>
+              <p> Enterprise name:</p>
+            <select name="getcompany" id="getcompany1">
+              {% for company in company %}
+              <option  value="{{company['companyname']}}">{{company['companyname']}}</option>
+                {% endfor %}
+            </select>
+            <p> Product/Services name:</p>
+            <select name="modalgetitem"id="modalgetitem">
+              <option value="">all</option>
+            </select>
+            <div class="form-group">
+              <span>URL:</span>
+              <input class="form-field" type="text" name="urlshoppe" placeholder="shoppe.ph">
+          </div>
+            <!-- <input type="text" name="urlshoppe"> -->
+          </div>
+      </div>
+      <div class="modal-foot">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Insert</button>
+      </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+
+$(document).ready(function() {
+          var selectedValue = $('#getcompany').val();
+          $.ajax({
+            url: '/changeitem1',
+            type: 'POST',
+            data: {feedbackType: selectedValue},
+            success: function(response) {
+             var options = '';
+             $.each(response.listitem, function(index, value) {
+             options += '<option value="' + value + '">' + value + '</option>';
+             });
+            $('#modalgetitem').html(options)
+            $('#itemeqweqw').html(options);
+            updateChartlabel(response.listallitem,response.listallitemaverage)
+            },
+            error: function(xhr, status, error) {
+              console.log(error);
+            }
+          });
+        });
+        
+
+
+
+
+
+
+
+</script>
+
+</body>
+</html>
